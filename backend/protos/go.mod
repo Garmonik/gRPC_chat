@@ -1,4 +1,4 @@
-module github.com/Garmonik/gRPC_chat/protos
+module github.com/Garmonik/gRPC_chat/backend/protos
 
 go 1.23
 
