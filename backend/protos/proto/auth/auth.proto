@@ -7,6 +7,7 @@ option go_package = "chat.auth.v1;authv1";
 service Auth {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
 }
 
 message RegisterRequest {
@@ -24,5 +25,13 @@ message LoginRequest {
 }
 
 message LoginResponse {
-  string token = 1; // Simple Auth token of the logged in user
+  string session_uuid = 1; // Session_uuid of the logged in user
+}
+
+message LogoutRequest {
+  string session_uuid = 1; // Session_uuid of the logged in user
+}
+
+message LogoutResponse {
+  string message = 1; // Response text about logout user
 }
