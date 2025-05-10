@@ -17,10 +17,13 @@ type Auth interface {
 		ctx context.Context,
 		sessionUuid string,
 	) error
+	CloseSession(
+		ctx context.Context,
+		sessionUuid string,
+	) error
 }
 
 type SessionResponse struct {
 	SessionUUID string `json:"session_uuid"`
 	Success     bool   `json:"success"`
-	Message     string `json:"message,omitempty"`
 }

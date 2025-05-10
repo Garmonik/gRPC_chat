@@ -28,9 +28,7 @@ func (s *serverAPI) Login(ctx context.Context, req *authv1.LoginRequest) (*authv
 			SessionUuid: LoginResponse.SessionUUID,
 		}, nil
 	}
-	
-	return nil, status.Error(codes.InvalidArgument, "login requires email and password")
-
+	return nil, status.Error(codes.InvalidArgument, "Data not valid")
 }
 
 func (s *serverAPI) Register(ctx context.Context, req *authv1.RegisterRequest) (*authv1.RegisterResponse, error) {
@@ -47,6 +45,15 @@ func (s *serverAPI) Logout(ctx context.Context, req *authv1.LogoutRequest) (*aut
 		return nil, status.Error(codes.InvalidArgument, "login requires session uuid")
 	}
 	return &authv1.LogoutResponse{
+		Message: "Logout",
+	}, nil
+}
+
+func (s *serverAPI) CloseSession(ctx context.Context, req *authv1.CloseSessionRequest) (*authv1.CloseSessionResponse, error) {
+	if req.GetSessionUuid() == "" {
+		return nil, status.Error(codes.InvalidArgument, "login requires session uuid")
+	}
+	return &authv1.CloseSessionResponse{
 		Message: "Logout",
 	}, nil
 }

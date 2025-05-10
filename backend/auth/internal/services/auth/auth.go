@@ -46,25 +46,30 @@ func (a *Auth) Login(
 	defer log.Info("end Login service")
 
 	if isValidEmail := validate_lib.ValidEmail(email); isValidEmail == false {
-		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Message: "Email not valid"}, fmt.Errorf("email not valid")
+		log.Error("Email is invalid", slog.String("email", email))
+		return interfase_lib.SessionResponse{SessionUUID: "", Success: false}, fmt.Errorf("email not valid")
 	}
-
-	user, err := auth_utils.GetUserByEmail(email, password, a.storage.Db, a.cfg)
+	user, err := auth_utils.GetUserByEmail(email, password, a.storage.Db)
 	if err != nil {
-		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Message: "Not user with this email"}, err
+		log.Error("User not found", slog.String("email", email), slog.String("error", err.Error()))
+		return interfase_lib.SessionResponse{SessionUUID: "", Success: false}, err
 	}
 	isVerifyUser, err := crypto_lib.VerifyString(password, user.PasswordHash, a.cfg)
 	if err != nil {
-		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Message: "Error with check password"}, err
+		log.Error("Error verifying password", slog.String("error", err.Error()))
+		return interfase_lib.SessionResponse{SessionUUID: "", Success: false}, err
 	}
 	if isVerifyUser == false {
-		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Message: "Incorrect password"}, fmt.Errorf("incorrect password")
+		log.Error("User is invalid", slog.String("email", email))
+		return interfase_lib.SessionResponse{SessionUUID: "", Success: false}, fmt.Errorf("incorrect password")
 	}
 	sessionID, err := auth_utils.CreateNewSession(user.ID, a.storage.Db, a.cfg)
 	if err != nil {
-		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Message: "Error with your account"}, err
+		log.Error("Error creating new session", slog.String("error", err.Error()))
+		return interfase_lib.SessionResponse{SessionUUID: "", Success: false}, err
 	}
-	return interfase_lib.SessionResponse{SessionUUID: sessionID, Success: true, Message: "Success"}, nil
+	log.Info("session created", slog.String("sessionID", sessionID))
+	return interfase_lib.SessionResponse{SessionUUID: sessionID, Success: true}, nil
 }
 
 func (a *Auth) RegisterNewUser(ctx context.Context, email string, password string) (int64, error) {
@@ -74,5 +79,10 @@ func (a *Auth) RegisterNewUser(ctx context.Context, email string, password strin
 
 func (a *Auth) Logout(ctx context.Context, sessionUuid string) error {
 	const op = "Auth.Logout"
+	panic("implement me")
+}
+
+func (a *Auth) CloseSession(ctx context.Context, sessionUuid string) error {
+	const op = "Auth.CloseSession"
 	panic("implement me")
 }
