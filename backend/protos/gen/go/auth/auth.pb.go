@@ -309,94 +309,6 @@ func (x *LogoutResponse) GetMessage() string {
 	return ""
 }
 
-type CloseSessionRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionUuid   string                 `protobuf:"bytes,1,opt,name=session_uuid,json=sessionUuid,proto3" json:"session_uuid,omitempty"` // Session id to close
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CloseSessionRequest) Reset() {
-	*x = CloseSessionRequest{}
-	mi := &file_auth_auth_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CloseSessionRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CloseSessionRequest) ProtoMessage() {}
-
-func (x *CloseSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_auth_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CloseSessionRequest.ProtoReflect.Descriptor instead.
-func (*CloseSessionRequest) Descriptor() ([]byte, []int) {
-	return file_auth_auth_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *CloseSessionRequest) GetSessionUuid() string {
-	if x != nil {
-		return x.SessionUuid
-	}
-	return ""
-}
-
-type CloseSessionResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"` // Response text about close session user
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CloseSessionResponse) Reset() {
-	*x = CloseSessionResponse{}
-	mi := &file_auth_auth_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CloseSessionResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CloseSessionResponse) ProtoMessage() {}
-
-func (x *CloseSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_auth_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CloseSessionResponse.ProtoReflect.Descriptor instead.
-func (*CloseSessionResponse) Descriptor() ([]byte, []int) {
-	return file_auth_auth_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *CloseSessionResponse) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
 var File_auth_auth_proto protoreflect.FileDescriptor
 
 const file_auth_auth_proto_rawDesc = "" +
@@ -417,16 +329,11 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\rLogoutRequest\x12!\n" +
 	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"8\n" +
-	"\x13CloseSessionRequest\x12!\n" +
-	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\"0\n" +
-	"\x14CloseSessionResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\xef\x01\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2\xa8\x01\n" +
 	"\x04Auth\x129\n" +
 	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x16.auth.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x123\n" +
-	"\x06Logout\x12\x13.auth.LogoutRequest\x1a\x14.auth.LogoutResponse\x12E\n" +
-	"\fCloseSession\x12\x19.auth.CloseSessionRequest\x1a\x1a.auth.CloseSessionResponseB\x15Z\x13chat.auth.v1;authv1b\x06proto3"
+	"\x06Logout\x12\x13.auth.LogoutRequest\x1a\x14.auth.LogoutResponseB\x15Z\x13chat.auth.v1;authv1b\x06proto3"
 
 var (
 	file_auth_auth_proto_rawDescOnce sync.Once
@@ -440,28 +347,24 @@ func file_auth_auth_proto_rawDescGZIP() []byte {
 	return file_auth_auth_proto_rawDescData
 }
 
-var file_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_auth_auth_proto_goTypes = []any{
-	(*RegisterRequest)(nil),      // 0: auth.RegisterRequest
-	(*RegisterResponse)(nil),     // 1: auth.RegisterResponse
-	(*LoginRequest)(nil),         // 2: auth.LoginRequest
-	(*LoginResponse)(nil),        // 3: auth.LoginResponse
-	(*LogoutRequest)(nil),        // 4: auth.LogoutRequest
-	(*LogoutResponse)(nil),       // 5: auth.LogoutResponse
-	(*CloseSessionRequest)(nil),  // 6: auth.CloseSessionRequest
-	(*CloseSessionResponse)(nil), // 7: auth.CloseSessionResponse
+	(*RegisterRequest)(nil),  // 0: auth.RegisterRequest
+	(*RegisterResponse)(nil), // 1: auth.RegisterResponse
+	(*LoginRequest)(nil),     // 2: auth.LoginRequest
+	(*LoginResponse)(nil),    // 3: auth.LoginResponse
+	(*LogoutRequest)(nil),    // 4: auth.LogoutRequest
+	(*LogoutResponse)(nil),   // 5: auth.LogoutResponse
 }
 var file_auth_auth_proto_depIdxs = []int32{
 	0, // 0: auth.Auth.Register:input_type -> auth.RegisterRequest
 	2, // 1: auth.Auth.Login:input_type -> auth.LoginRequest
 	4, // 2: auth.Auth.Logout:input_type -> auth.LogoutRequest
-	6, // 3: auth.Auth.CloseSession:input_type -> auth.CloseSessionRequest
-	1, // 4: auth.Auth.Register:output_type -> auth.RegisterResponse
-	3, // 5: auth.Auth.Login:output_type -> auth.LoginResponse
-	5, // 6: auth.Auth.Logout:output_type -> auth.LogoutResponse
-	7, // 7: auth.Auth.CloseSession:output_type -> auth.CloseSessionResponse
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
+	1, // 3: auth.Auth.Register:output_type -> auth.RegisterResponse
+	3, // 4: auth.Auth.Login:output_type -> auth.LoginResponse
+	5, // 5: auth.Auth.Logout:output_type -> auth.LogoutResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -478,7 +381,7 @@ func file_auth_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_auth_auth_proto_rawDesc), len(file_auth_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

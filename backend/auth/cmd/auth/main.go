@@ -38,5 +38,5 @@ func main() {
 
 	application.GRPCServer.Stop()
 
-	log.Info("stopping auth services")
+	log.Info("stop auth services")
 }
