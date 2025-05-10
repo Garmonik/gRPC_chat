@@ -2,6 +2,13 @@ package interfase_lib
 
 import "context"
 
+const (
+	InvalidArgument  = 3
+	NotFound         = 5
+	AlreadyExists    = 6
+	PermissionDenied = 7
+)
+
 type Auth interface {
 	Login(
 		ctx context.Context,
@@ -12,6 +19,7 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
+		name string,
 	) (RegisterResponse RegisterResponse, err error)
 	Logout(
 		ctx context.Context,

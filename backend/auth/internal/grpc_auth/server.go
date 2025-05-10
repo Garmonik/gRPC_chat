@@ -35,7 +35,7 @@ func (s *serverAPI) Register(ctx context.Context, req *authv1.RegisterRequest) (
 	if req.GetEmail() == "" || req.GetPassword() == "" {
 		return nil, status.Error(codes.InvalidArgument, "register requires email and password")
 	}
-	RegisterResponse, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword())
+	RegisterResponse, err := s.auth.RegisterNewUser(ctx, req.GetEmail(), req.GetPassword(), req.GetName())
 	return &authv1.RegisterResponse{
 		UserId: 123,
 	}, nil

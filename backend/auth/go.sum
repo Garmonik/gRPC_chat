@@ -1,5 +1,5 @@
-github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250510004132-e48180f0e07e h1:1vhpNosVFAV7DXPhe+NoMKkfEQ/Sk8eijGjy3kf6RTE=
-github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250510004132-e48180f0e07e/go.mod h1:axTDID0i9d6wfISjQpaG6ojvG+vYoXoep3Bo6x8pnq4=
+github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250510132507-dcbc62630d65 h1:vLfeXg7pH1L7A+u9F4kcQsVVX9D/0+pSUNI6YcMTUug=
+github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250510132507-dcbc62630d65/go.mod h1:axTDID0i9d6wfISjQpaG6ojvG+vYoXoep3Bo6x8pnq4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
