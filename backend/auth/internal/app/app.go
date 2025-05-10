@@ -15,7 +15,6 @@ type App struct {
 
 func New(
 	log *slog.Logger,
-	grpcPort int,
 	cfg *config.Config) *App {
 
 	dataBase, err := database.New(log, cfg)
@@ -24,6 +23,6 @@ func New(
 	}
 
 	authApp := auth.New(log, dataBase, cfg.SessionTTL, cfg)
-	gRPCapp := grpcapp.New(log, authApp, grpcPort)
+	gRPCapp := grpcapp.New(log, authApp, cfg.GRPC.Port, cfg.GRPC.Host)
 	return &App{GRPCServer: gRPCapp, DB: dataBase}
 }

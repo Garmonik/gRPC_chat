@@ -19,7 +19,7 @@ func main() {
 	log.Info("starting auth services", slog.Any("Environment", cfg.Environment))
 
 	// setup application with gRPC
-	application := app.New(log, cfg.GRPC.Port, cfg)
+	application := app.New(log, cfg)
 
 	go func() {
 		err := application.GRPCServer.MustRun()

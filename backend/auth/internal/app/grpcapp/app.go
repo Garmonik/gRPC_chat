@@ -13,10 +13,11 @@ type App struct {
 	log        *slog.Logger
 	gRPCServer *grpc.Server
 	port       int
+	host       string
 }
 
 func New(log *slog.Logger, authService authinterfase.Auth,
-	port int) *App {
+	port int, host string) *App {
 	gRPCServer := grpc.NewServer()
 
 	grpc_auth.RegisterServerAPI(gRPCServer, authService)
@@ -24,6 +25,7 @@ func New(log *slog.Logger, authService authinterfase.Auth,
 		log:        log,
 		gRPCServer: gRPCServer,
 		port:       port,
+		host:       host,
 	}
 }
 
@@ -33,7 +35,7 @@ func (app *App) MustRun() error {
 		slog.String("operation", op),
 		slog.Int("port", app.port),
 	)
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", app.port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", app.host, app.port))
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}

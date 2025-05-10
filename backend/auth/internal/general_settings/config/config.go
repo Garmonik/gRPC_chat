@@ -18,6 +18,7 @@ type DBConfig struct {
 type GRPCConfig struct {
 	Port    int           `env:"GRPC_PORT"`
 	Timeout time.Duration `env:"GRPC_TIMEOUT"`
+	Host    string        `env:"GRPC_HOST"`
 }
 
 type Config struct {
@@ -54,6 +55,7 @@ func loadGRPCConfig() GRPCConfig {
 	return GRPCConfig{
 		Port:    config_lib.GetEnvInt("GRPC_PORT"),
 		Timeout: config_lib.GetEnvDuration("GRPC_TIMEOUT"),
+		Host:    config_lib.GetEnvStr("GRPC_HOST"),
 	}
 }
 
