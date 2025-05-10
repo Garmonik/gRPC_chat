@@ -20,7 +20,7 @@ func HashString(str string, cfg *config.Config) (string, error) {
 	b64Salt := base64.RawStdEncoding.EncodeToString(salt)
 	b64Hash := base64.RawStdEncoding.EncodeToString(hash)
 
-	return cfg.Secret + b64Salt + "$" + b64Hash, nil
+	return cfg.Secret + "$" + b64Salt + "$" + b64Hash, nil
 }
 
 func VerifyString(str, encodedHash string, cfg *config.Config) (bool, error) {

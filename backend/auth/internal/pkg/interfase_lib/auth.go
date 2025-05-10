@@ -7,6 +7,8 @@ const (
 	NotFound         = 5
 	AlreadyExists    = 6
 	PermissionDenied = 7
+	Internal         = 13
+	OK               = 0
 )
 
 type Auth interface {
@@ -14,6 +16,7 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
+		ipAddress string,
 	) (LoginResponse SessionResponse, err error)
 	RegisterNewUser(
 		ctx context.Context,
@@ -24,12 +27,14 @@ type Auth interface {
 	Logout(
 		ctx context.Context,
 		sessionUuid string,
-	) error
+		userId string,
+	) int
 }
 
 type SessionResponse struct {
 	SessionUUID string `json:"session_uuid"`
 	Success     bool   `json:"success"`
+	Code        int    `json:"code"`
 }
 
 type RegisterResponse struct {

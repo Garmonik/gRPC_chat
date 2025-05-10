@@ -1,6 +1,5 @@
 -- +goose Up
 -- +goose StatementBegin
--- Создаем таблицу для отслеживания миграций, если её нет
 CREATE TABLE IF NOT EXISTS goose_db_version (
 id SERIAL PRIMARY KEY,
 version_id BIGINT NOT NULL,
@@ -21,14 +20,6 @@ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 
 CREATE INDEX idx_userprofile_email ON userprofile(email);
 CREATE INDEX idx_userprofile_name ON userprofile(name) WHERE name IS NOT NULL;
-
-ALTER TABLE userprofile
-ADD CONSTRAINT name_safe_check
-CHECK (name IS NULL OR name ~ '^[\p{L}\p{N}\s-]+$');
-
-ALTER TABLE userprofile
-ADD CONSTRAINT bio_xss_check
-CHECK (bio IS NULL OR bio !~* '(javascript:|on\w+\s*=|<\s*(script|iframe|link|meta))');
 
 COMMENT ON TABLE userprofile IS 'User profiles table';
 COMMENT ON COLUMN userprofile.id IS 'Primary key';

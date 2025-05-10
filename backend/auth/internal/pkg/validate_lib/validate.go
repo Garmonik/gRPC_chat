@@ -3,6 +3,7 @@ package validate_lib
 import (
 	passwordvalidator "github.com/wagslane/go-password-validator"
 	"net/mail"
+	"strconv"
 )
 
 func ValidEmail(email string) bool {
@@ -17,4 +18,13 @@ func ValidPassword(password string) bool {
 		return false
 	}
 	return true
+}
+
+func ConversionStringToUint(str string) (uint, error) {
+	num, err := strconv.ParseUint(str, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	result := uint(num)
+	return result, nil
 }
