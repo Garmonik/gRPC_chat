@@ -8,6 +8,7 @@ service Auth {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
   rpc Logout(LogoutRequest) returns (LogoutResponse);
+  rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse);
 }
 
 message RegisterRequest {
@@ -20,8 +21,9 @@ message RegisterResponse {
 }
 
 message LoginRequest {
-  string email    = 1; // Email of the user to login
-  string password = 2; // Password of the user to login
+  string email      = 1; // Email of the user to login
+  string password   = 2; // Password of the user to login
+  string ip_address = 3; // Ip Address login user
 }
 
 message LoginResponse {
@@ -34,4 +36,12 @@ message LogoutRequest {
 
 message LogoutResponse {
   string message = 1; // Response text about logout user
+}
+
+message CloseSessionRequest {
+  string session_uuid = 1; // Session id to close
+}
+
+message CloseSessionResponse {
+  string message = 1; // Response text about close session user
 }

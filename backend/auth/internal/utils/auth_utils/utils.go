@@ -1,0 +1,32 @@
+package auth_utils
+
+import (
+	"github.com/Garmonik/gRPC_chat/backend/auth/internal/general_settings/config"
+	"github.com/Garmonik/gRPC_chat/backend/auth/internal/general_settings/database/models"
+	"gorm.io/gorm"
+	"time"
+)
+
+func GetUserByEmail(email, password string, db *gorm.DB, cfg *config.Config) (*models.User, error) {
+	var user models.User
+	if err := db.Select("id", "email", "password_hash").
+		Where("email = ?", email).
+		First(&user).Error; err != nil {
+		return &models.User{}, err
+	}
+	return &user, nil
+}
+
+func CreateNewSession(userID uint, db *gorm.DB, cfg *config.Config) (string, error) {
+	session := models.Session{
+		UserID:    userID,
+		ExpiresAt: time.Now().Add(cfg.SessionTTL),
+		IsClosed:  false,
+	}
+
+	result := db.Create(&session)
+	if result.Error != nil {
+		return "", result.Error
+	}
+	return session.ID.String(), nil
+}
