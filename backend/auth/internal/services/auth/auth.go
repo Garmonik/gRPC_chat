@@ -81,8 +81,3 @@ func (a *Auth) Logout(ctx context.Context, sessionUuid string) error {
 	const op = "Auth.Logout"
 	panic("implement me")
 }
-
-func (a *Auth) CloseSession(ctx context.Context, sessionUuid string) error {
-	const op = "Auth.CloseSession"
-	panic("implement me")
-}

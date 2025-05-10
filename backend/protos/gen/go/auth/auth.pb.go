@@ -224,6 +224,7 @@ func (x *LoginResponse) GetSessionUuid() string {
 type LogoutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionUuid   string                 `protobuf:"bytes,1,opt,name=session_uuid,json=sessionUuid,proto3" json:"session_uuid,omitempty"` // Session_uuid of the logged in user
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                // User id for make logout
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -261,6 +262,13 @@ func (*LogoutRequest) Descriptor() ([]byte, []int) {
 func (x *LogoutRequest) GetSessionUuid() string {
 	if x != nil {
 		return x.SessionUuid
+	}
+	return ""
+}
+
+func (x *LogoutRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
 	}
 	return ""
 }
@@ -325,9 +333,10 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\n" +
 	"ip_address\x18\x03 \x01(\tR\tipAddress\"2\n" +
 	"\rLoginResponse\x12!\n" +
-	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\"2\n" +
+	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\"K\n" +
 	"\rLogoutRequest\x12!\n" +
-	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\"*\n" +
+	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage2\xa8\x01\n" +
 	"\x04Auth\x129\n" +

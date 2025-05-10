@@ -12,12 +12,8 @@ type Auth interface {
 		ctx context.Context,
 		email string,
 		password string,
-	) (userId int64, err error)
+	) (RegisterResponse RegisterResponse, err error)
 	Logout(
-		ctx context.Context,
-		sessionUuid string,
-	) error
-	CloseSession(
 		ctx context.Context,
 		sessionUuid string,
 	) error
@@ -26,4 +22,9 @@ type Auth interface {
 type SessionResponse struct {
 	SessionUUID string `json:"session_uuid"`
 	Success     bool   `json:"success"`
+}
+
+type RegisterResponse struct {
+	UserId int64 `json:"user_id"`
+	Code   int   `json:"code"`
 }
