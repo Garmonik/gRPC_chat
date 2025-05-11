@@ -108,7 +108,7 @@ func (g *GRPCAuthClient) Logout(ctx context.Context, sessionUUID, userID string)
 
 func (g *GRPCAuthClient) SessionsList(ctx context.Context, userID uint64) ([]models.Session, error) {
 	resp, err := g.client.GetSessions(ctx, &authv1.GetSessionsRequest{
-		UserId: &userID,
+		UserId: userID,
 	})
 	if err != nil {
 		g.log.Error("gRPC Logout failed", "error", err)

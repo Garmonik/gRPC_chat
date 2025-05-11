@@ -1,7 +1,7 @@
 package logger_lib
 
 import (
-	"github.com/Garmonik/gRPC_chat/backend/auth/pkg/logger/slogpretty"
+	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/pkg/logger_lib/slogpretty"
 	"log/slog"
 	"os"
 )

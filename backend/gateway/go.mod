@@ -5,7 +5,6 @@ go 1.23.0
 toolchain go1.24.0
 
 require (
-	github.com/Garmonik/gRPC_chat/backend/auth v0.0.0-20250511165426-0c0d43a4f95c
 	github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250511165426-0c0d43a4f95c
 	github.com/fatih/color v1.18.0
 	github.com/gin-gonic/gin v1.10.0
@@ -23,7 +22,6 @@ require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
-	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
