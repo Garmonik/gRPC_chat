@@ -11,7 +11,7 @@ type User struct {
 	Email        string    `gorm:"not null;uniqueIndex;size:255" json:"email,omitempty"`
 	PasswordHash string    `gorm:"not null;size:255" json:"-"`
 	Bio          string    `gorm:"type:text" json:"bio,omitempty"`
-	CreatedAt    time.Time `gorm:"autoCreateTime" json:"createdAt,omitempty"`
+	CreatedAt    time.Time `gorm:"autoCreateTime"  json:"-"`
 }
 
 func (User) TableName() string {
