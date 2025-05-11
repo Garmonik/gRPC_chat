@@ -232,7 +232,7 @@ func (x *LoginResponse) GetSessionUuid() string {
 type LogoutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SessionUuid   string                 `protobuf:"bytes,1,opt,name=session_uuid,json=sessionUuid,proto3" json:"session_uuid,omitempty"` // Session_uuid of the logged in user
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                // User id for make logout
+	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`               // User id for make logout
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -274,11 +274,11 @@ func (x *LogoutRequest) GetSessionUuid() string {
 	return ""
 }
 
-func (x *LogoutRequest) GetUserId() string {
+func (x *LogoutRequest) GetUserId() uint64 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 type LogoutResponse struct {
@@ -577,7 +577,7 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\"K\n" +
 	"\rLogoutRequest\x12!\n" +
 	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\"*\n" +
+	"\auser_id\x18\x02 \x01(\x04R\x06userId\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\"-\n" +
 	"\x12GetSessionsRequest\x12\x17\n" +

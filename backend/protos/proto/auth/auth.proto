@@ -34,7 +34,7 @@ message LoginResponse {
 
 message LogoutRequest {
   string session_uuid = 1; // Session_uuid of the logged in user
-  string user_id      = 2; // User id for make logout
+  uint64 user_id      = 2; // User id for make logout
 }
 
 message LogoutResponse {

@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "chat.user.v1;userv1";
+
+service User {
+  rpc MyUser(MyUserRequest) returns (MyUserResponse);
+  rpc MyUserUpdate(MyUserUpdateRequest) returns (MyUserUpdateResponse);
+  rpc User(UserRequest) returns (UserResponse);
+  rpc UserList(UserListRequest) returns (UserListResponse);
+  rpc FriendAdd(FriendAddRequest) returns (FriendAddResponse);
+  rpc FriendDelete(FriendDeleteRequest) returns (FriendDeleteResponse);
+  rpc FriendList(FriendListRequest) returns (FriendListResponse);
+  rpc BlockAdd(BlockAddRequest) returns (BlockAddResponse);
+  rpc BlockDelete(BlockDeleteRequest) returns (BlockDeleteResponse);
+  rpc BlockList(BlockListRequest) returns (BlockListResponse);
+
+}
+
+message MyUserRequest {
+  int64 user_id = 1;
+}
+
+message MyUserResponse {
+  int64 id          = 1;
+  string email      = 2;
+  string name       = 3;
+  string bio        = 4;
+  string created_at = 5;
+}
+
+message MyUserUpdateRequest {
+  int64 user_id   = 1;
+  string email    = 2;
+  string password = 3;
+  string bio      = 4;
+}
+
+message MyUserUpdateResponse {
+  string message = 1;
+}
+
+message UserRequest {
+  int64 user_id = 1;
+}
+
+message UserResponse {
+  int64 id    = 1;
+  string name = 2;
+  string bio  = 3;
+}
+
+message UserListRequest {
+  int64 user_id = 1;
+}
+
+message UserListResponse {
+  repeated UserData user = 1;
+}
+
+message FriendAddRequest {
+  int64 my_user_id = 1;
+  int64 user_id    = 2;
+}
+
+message FriendAddResponse {
+  string message = 1;
+}
+
+message FriendDeleteRequest {
+  int64 my_user_id = 1;
+  int64 user_id    = 2;
+}
+
+message FriendDeleteResponse {
+  string message = 1;
+}
+
+message FriendListRequest {
+  int64 user_id = 1;
+}
+
+message FriendListResponse {
+  repeated UserData user = 1;
+}
+
+message BlockAddRequest {
+  int64 my_user_id = 1;
+  int64 user_id    = 2;
+}
+
+message BlockAddResponse {
+  string message = 1;
+}
+
+message BlockDeleteRequest {
+  int64 my_user_id = 1;
+  int64 user_id    = 2;
+}
+
+message BlockDeleteResponse {
+  string message = 1;
+}
+
+message BlockListRequest {
+  int64 user_id = 1;
+}
+
+message BlockListResponse {
+  repeated UserData user = 1;
+}
+
+message UserData {
+  uint64 id = 1;
+  string name = 2;
+}

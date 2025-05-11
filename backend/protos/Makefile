@@ -8,7 +8,11 @@ COMMON_PROTOC_OPTS := \
 	--go-grpc_out=$(OUT_DIR) \
 	--go-grpc_opt=paths=source_relative
 
-gen: auth chat
+gen: auth chat user
+
+user:
+	protoc -I $(PROTO_DIR) $(PROTO_DIR)/user/*.proto $(COMMON_PROTOC_OPTS)
+
 
 auth:
 	protoc -I $(PROTO_DIR) $(PROTO_DIR)/auth/*.proto $(COMMON_PROTOC_OPTS)
