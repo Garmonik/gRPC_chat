@@ -95,7 +95,12 @@ func RunMigrations(cfg *config.Config, log *slog.Logger, op MigrationFunc) error
 	if err != nil {
 		return fmt.Errorf("failed to open DB connection: %w", err)
 	}
-	defer db.Close()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Error("Error with close db", "error", err.Error())
+		}
+	}(db)
 
 	if err := db.Ping(); err != nil {
 		return fmt.Errorf("failed to ping DB: %w", err)

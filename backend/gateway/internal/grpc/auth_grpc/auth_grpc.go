@@ -95,7 +95,7 @@ func (g *GRPCAuthClient) Register(ctx context.Context, email, password, name str
 	return resp.UserId, nil
 }
 
-func (g *GRPCAuthClient) Logout(ctx context.Context, sessionUUID, userID string) (string, error) {
+func (g *GRPCAuthClient) Logout(ctx context.Context, sessionUUID string, userID uint64) (string, error) {
 	resp, err := g.client.Logout(ctx, &authv1.LogoutRequest{
 		SessionUuid: sessionUUID,
 		UserId:      userID,

@@ -9,7 +9,6 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"strconv"
 )
 
 type Auth struct {
@@ -77,7 +76,7 @@ func (a *Auth) logoutHandler(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Permission denied"})
 	}
-	message, err := a.grpcAuthClient.Logout(ctx.Request.Context(), sessionUUID, strconv.Itoa(int(user.ID)))
+	message, err := a.grpcAuthClient.Logout(ctx.Request.Context(), sessionUUID, uint64(user.ID))
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		return
@@ -97,7 +96,7 @@ func (a *Auth) closeSessionHandler(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "Permission denied"})
 	}
-	message, err := a.grpcAuthClient.Logout(ctx.Request.Context(), data.SessionID, strconv.Itoa(int(user.ID)))
+	message, err := a.grpcAuthClient.Logout(ctx.Request.Context(), data.SessionID, uint64(user.ID))
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		return
