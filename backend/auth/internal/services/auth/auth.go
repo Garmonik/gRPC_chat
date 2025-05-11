@@ -53,7 +53,7 @@ func (a *Auth) Login(
 	}
 	user, err := auth_utils.GetUserByEmail(email, a.storage.Db)
 	if err != nil {
-		log.Error("User not found", slog.String("email", email), slog.Any("error", err))
+		log.Error("User not found", slog.String("email", email), slog.Any("error", err.Error()))
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.NotFound}, err
 	}
 	isVerifyUser, err := crypto_lib.VerifyString(password, user.PasswordHash, a.cfg)
@@ -131,14 +131,13 @@ func (a *Auth) Logout(
 	userID, err := validate_lib.ConversionStringToUint(userId)
 	if err != nil {
 		log.Error("Error in ConversionStringToUint",
-			slog.Any("error", err),
+			slog.Any("error", err.Error()),
 			slog.Any("userID", userID))
 		return interfase_lib.InvalidArgument
 	}
 	user, err := auth_utils.GetUserByID(userID, a.storage.Db)
 	if user == nil {
 		log.Error("User not found",
-			slog.Any("error", err),
 			slog.Any("userID", userID))
 		return interfase_lib.NotFound
 	}

@@ -3,10 +3,11 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/config"
+	_ "github.com/lib/pq"
 	"github.com/urfave/cli/v2"
 	"log/slog"
 
-	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/config"
 	"github.com/pressly/goose/v3"
 )
 

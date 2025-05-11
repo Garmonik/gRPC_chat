@@ -1,4 +1,4 @@
-package logger
+package logger_lib
 
 import (
 	"github.com/Garmonik/gRPC_chat/backend/auth/pkg/logger/slogpretty"

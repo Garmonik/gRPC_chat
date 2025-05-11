@@ -24,7 +24,7 @@ func main() {
 	go func() {
 		err := application.GRPCServer.MustRun()
 		if err != nil {
-			log.Error("GRPC server failed to start", slog.Any("Error", err))
+			log.Error("GRPC server failed to start", slog.Any("Error", err.Error()))
 		}
 	}()
 

@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/config"
+	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log/slog"

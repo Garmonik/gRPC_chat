@@ -79,3 +79,9 @@ func GetEnvStr(valueEnv string) string {
 	}
 	return value
 }
+
+func GetEnvAddress(hostEnv, portEnv string) string {
+	port := GetEnvStr(portEnv)
+	host := GetEnvStr(hostEnv)
+	return host + ":" + port
+}
