@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/config"
+	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/database/models"
 	authv1 "github.com/Garmonik/gRPC_chat/backend/protos/gen/go/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
@@ -103,4 +104,15 @@ func (g *GRPCAuthClient) Logout(ctx context.Context, sessionUUID, userID string)
 		return "", err
 	}
 	return resp.Message, nil
+}
+
+func (g *GRPCAuthClient) SessionsList(ctx context.Context, userID uint64) ([]models.Session, error) {
+	resp, err := g.client.GetSessions(ctx, &authv1.GetSessionsRequest{
+		UserId: &userID,
+	})
+	if err != nil {
+		g.log.Error("gRPC Logout failed", "error", err)
+		return nil, err
+	}
+	return resp.Sessions, nil
 }

@@ -3,6 +3,7 @@ package grpc_auth
 import (
 	"context"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/interfase_lib"
+	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/utils_lib/auth_utils"
 	authv1 "github.com/Garmonik/gRPC_chat/backend/protos/gen/go/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -79,21 +80,19 @@ func (s *serverAPI) Logout(ctx context.Context, req *authv1.LogoutRequest) (*aut
 	}
 }
 
-func (s *serverAPI) SessionList(ctx context.Context, req *authv1.LogoutRequest) (*authv1.LogoutResponse, error) {
-	if req.GetSessionUuid() == "" {
+func (s *serverAPI) GetSessions(ctx context.Context, req *authv1.GetSessionsRequest) (*authv1.GetSessionsResponse, error) {
+	if req.GetUserId() == 0 {
 		return nil, status.Error(codes.InvalidArgument, "login requires session uuid")
 	}
-	code := s.auth.Logout(ctx, req.GetSessionUuid(), req.GetUserId())
+	listSession, code := s.auth.SessionList(ctx, req.GetUserId())
 	switch code {
 	case interfase_lib.OK:
-		return &authv1.LogoutResponse{Message: "The session was closed"}, nil
-	case interfase_lib.InvalidArgument:
-		return nil, status.Error(codes.InvalidArgument, "The data looks suspicious")
-	case interfase_lib.NotFound:
-		return nil, status.Error(codes.NotFound, "Session is not available for this user")
-	case interfase_lib.PermissionDenied:
-		return nil, status.Error(codes.PermissionDenied, "Access denied\n")
+		pbSessions := make([]*authv1.Session, 0, len(listSession))
+		for _, session := range listSession {
+			pbSessions = append(pbSessions, auth_utils.ConvertSessionToPB(session))
+		}
+		return &authv1.GetSessionsResponse{Sessions: pbSessions}, nil
 	default:
-		return nil, status.Error(codes.Internal, "Error logout")
+		return nil, status.Error(codes.Internal, "Error to get list_session")
 	}
 }

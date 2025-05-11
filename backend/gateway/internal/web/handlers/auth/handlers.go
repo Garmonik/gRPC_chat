@@ -106,3 +106,7 @@ func (a *Auth) CloseSessionHandler(ctx *gin.Context) {
 		"message": message,
 	})
 }
+
+func (a *Auth) sessionsList(ctx *gin.Context) {
+
+}

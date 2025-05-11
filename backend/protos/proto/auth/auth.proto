@@ -42,7 +42,7 @@ message LogoutResponse {
 }
 
 message GetSessionsRequest {
-  optional uint64 user_id = 1; // User id to session
+  uint64 user_id = 1; // User id to session
 }
 
 message GetSessionsResponse {

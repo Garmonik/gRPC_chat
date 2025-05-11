@@ -327,7 +327,7 @@ func (x *LogoutResponse) GetMessage() string {
 
 type GetSessionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        *uint64                `protobuf:"varint,1,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"` // User id to session
+	UserId        uint64                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // User id to session
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -363,8 +363,8 @@ func (*GetSessionsRequest) Descriptor() ([]byte, []int) {
 }
 
 func (x *GetSessionsRequest) GetUserId() uint64 {
-	if x != nil && x.UserId != nil {
-		return *x.UserId
+	if x != nil {
+		return x.UserId
 	}
 	return 0
 }
@@ -579,11 +579,9 @@ const file_auth_auth_proto_rawDesc = "" +
 	"\fsession_uuid\x18\x01 \x01(\tR\vsessionUuid\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\">\n" +
-	"\x12GetSessionsRequest\x12\x1c\n" +
-	"\auser_id\x18\x01 \x01(\x04H\x00R\x06userId\x88\x01\x01B\n" +
-	"\n" +
-	"\b_user_id\"@\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"-\n" +
+	"\x12GetSessionsRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x04R\x06userId\"@\n" +
 	"\x13GetSessionsResponse\x12)\n" +
 	"\bsessions\x18\x01 \x03(\v2\r.auth.SessionR\bsessions\"\xb3\x01\n" +
 	"\aSession\x12\x0e\n" +
@@ -655,7 +653,6 @@ func file_auth_auth_proto_init() {
 	if File_auth_auth_proto != nil {
 		return
 	}
-	file_auth_auth_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

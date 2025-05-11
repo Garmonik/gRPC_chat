@@ -20,5 +20,6 @@ func URLs(cfg *config.Config, r *gin.RouterGroup, log *slog.Logger, dataBase *go
 	authHandlers := New(cfg, r, log, dataBase)
 
 	r.GET("check/auth/", authHandlers.healthCheck)
-	r.GET("logout/", authHandlers.logoutHandler)
+	r.POST("logout/", authHandlers.logoutHandler)
+	r.GET("sessions/", authHandlers.sessionsList)
 }

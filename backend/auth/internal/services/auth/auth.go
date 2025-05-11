@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/general_settings/config"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/general_settings/database"
+	"github.com/Garmonik/gRPC_chat/backend/auth/internal/general_settings/database/models"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/crypto_lib"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/interfase_lib"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/utils_lib/auth_utils"
@@ -51,7 +52,7 @@ func (a *Auth) Login(
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.InvalidArgument},
 			fmt.Errorf("email not valid")
 	}
-	user, err := auth_utils.GetUserByEmail(email, a.storage.Db)
+	user, err := auth_utils.GetUserByEmail(ctx, email, a.storage.Db)
 	if err != nil {
 		log.Error("User not found", slog.String("email", email), slog.Any("error", err.Error()))
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.NotFound}, err
@@ -66,7 +67,7 @@ func (a *Auth) Login(
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.InvalidArgument},
 			fmt.Errorf("incorrect password")
 	}
-	sessionID, err := auth_utils.CreateNewSession(user.ID, ipAddress, a.storage.Db, a.cfg)
+	sessionID, err := auth_utils.CreateNewSession(ctx, user.ID, ipAddress, a.storage.Db, a.cfg)
 	if err != nil {
 		log.Error("Error creating new session", slog.String("error", err.Error()))
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.Internal}, err
@@ -97,19 +98,19 @@ func (a *Auth) RegisterNewUser(
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.InvalidArgument},
 			fmt.Errorf("password not valid")
 	}
-	user, _ := auth_utils.GetUserByEmail(email, a.storage.Db)
+	user, _ := auth_utils.GetUserByEmail(ctx, email, a.storage.Db)
 	if user != nil {
 		log.Error("User with this email already exists", slog.String("email", email))
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.AlreadyExists},
 			fmt.Errorf("user already exists")
 	}
-	user, _ = auth_utils.GetUserByName(name, a.storage.Db)
+	user, _ = auth_utils.GetUserByName(ctx, name, a.storage.Db)
 	if user != nil {
 		log.Error("User with this email already exists", slog.String("name", name))
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.AlreadyExists},
 			fmt.Errorf("user already exists")
 	}
-	user, err := auth_utils.CreateNewUser(email, password, name, a.storage.Db, a.cfg)
+	user, err := auth_utils.CreateNewUser(ctx, email, password, name, a.storage.Db, a.cfg)
 	if err != nil {
 		log.Error("Error creating new user", slog.String("error", err.Error()))
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.Internal}, err
@@ -135,20 +136,20 @@ func (a *Auth) Logout(
 			slog.Any("userID", userID))
 		return interfase_lib.InvalidArgument
 	}
-	user, err := auth_utils.GetUserByID(userID, a.storage.Db)
+	user, err := auth_utils.GetUserByID(ctx, userID, a.storage.Db)
 	if user == nil {
 		log.Error("User not found",
 			slog.Any("userID", userID))
 		return interfase_lib.NotFound
 	}
-	session, err := auth_utils.CheckSessionID(sessionUuid, userID, a.storage.Db)
+	session, err := auth_utils.CheckSessionID(ctx, sessionUuid, userID, a.storage.Db)
 	if session == nil {
 		log.Error("User does not have access to this session",
 			slog.Any("error", err),
 			slog.Any("userID", userID))
 		return interfase_lib.PermissionDenied
 	}
-	err = auth_utils.CloseSession(sessionUuid, userID, a.storage.Db)
+	err = auth_utils.CloseSession(ctx, sessionUuid, userID, a.storage.Db)
 	if err != nil {
 		log.Error("Error closing session",
 			slog.Any("error", err.Error()),
@@ -160,7 +161,17 @@ func (a *Auth) Logout(
 
 func (a *Auth) SessionList(
 	ctx context.Context,
-	userId string) int {
+	userId uint64,
+) ([]models.Session, int) {
 	const op = "Auth.SessionList"
-	panic("implement me")
+	log := a.log.With(slog.String("op", op))
+	log.Info("start SessionList service")
+	defer log.Info("end SessionList service")
+	sessions, err := auth_utils.GetActiveSession(ctx, userId, a.storage.Db)
+	if err != nil {
+		log.Error("Error in GetActiveSession", "error", err.Error())
+		return nil, interfase_lib.Internal
+	}
+	log.Debug("Session list success")
+	return sessions, interfase_lib.OK
 }

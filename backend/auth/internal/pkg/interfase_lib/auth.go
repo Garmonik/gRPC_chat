@@ -1,6 +1,9 @@
 package interfase_lib
 
-import "context"
+import (
+	"context"
+	"github.com/Garmonik/gRPC_chat/backend/auth/internal/general_settings/database/models"
+)
 
 const (
 	InvalidArgument  = 3
@@ -31,8 +34,8 @@ type Auth interface {
 	) int
 	SessionList(
 		ctx context.Context,
-		userId string,
-	) int
+		userId uint64,
+	) ([]models.Session, int)
 }
 
 type SessionResponse struct {
