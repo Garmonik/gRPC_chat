@@ -161,6 +161,6 @@ func (a *Auth) Logout(
 func (a *Auth) SessionList(
 	ctx context.Context,
 	userId string) int {
-	const op = "Auth.Logout" {
-
+	const op = "Auth.SessionList"
+	panic("implement me")
 }

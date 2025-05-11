@@ -29,6 +29,10 @@ type Auth interface {
 		sessionUuid string,
 		userId string,
 	) int
+	SessionList(
+		ctx context.Context,
+		userId string,
+	) int
 }
 
 type SessionResponse struct {

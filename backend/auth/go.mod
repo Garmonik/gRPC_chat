@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.24.0
 
 require (
-	github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250510144557-6b079ca95864
+	github.com/Garmonik/gRPC_chat/backend/protos v0.0.0-20250511004015-5121a044d2a6
 	github.com/fatih/color v1.18.0
 	github.com/google/uuid v1.6.0
 	github.com/lpernett/godotenv v0.0.0-20230527005122-0de1d4c5ef5e
