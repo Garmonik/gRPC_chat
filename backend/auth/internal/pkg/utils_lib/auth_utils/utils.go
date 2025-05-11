@@ -32,7 +32,7 @@ func GetUserByName(ctx context.Context, name string, db *gorm.DB) (*models.User,
 	return &user, nil
 }
 
-func GetUserByID(ctx context.Context, id uint, db *gorm.DB) (*models.User, error) {
+func GetUserByID(ctx context.Context, id uint64, db *gorm.DB) (*models.User, error) {
 	var user models.User
 	if err := db.WithContext(ctx).Select("id", "name", "email", "password_hash").
 		Where("id = ?", id).
@@ -42,7 +42,7 @@ func GetUserByID(ctx context.Context, id uint, db *gorm.DB) (*models.User, error
 	return &user, nil
 }
 
-func CheckSessionID(ctx context.Context, sessionUuid string, userID uint, db *gorm.DB) (*models.Session, error) {
+func CheckSessionID(ctx context.Context, sessionUuid string, userID uint64, db *gorm.DB) (*models.Session, error) {
 	sessionID, err := uuid.Parse(sessionUuid)
 	if err != nil {
 		return nil, fmt.Errorf("invalid session UUID: %v", err)
@@ -56,7 +56,7 @@ func CheckSessionID(ctx context.Context, sessionUuid string, userID uint, db *go
 	return &session, nil
 }
 
-func CloseSession(ctx context.Context, sessionUuid string, userID uint, db *gorm.DB) error {
+func CloseSession(ctx context.Context, sessionUuid string, userID uint64, db *gorm.DB) error {
 	sessionID, err := uuid.Parse(sessionUuid)
 	if err != nil {
 		return fmt.Errorf("invalid session UUID: %v", err)

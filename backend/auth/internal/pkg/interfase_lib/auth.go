@@ -30,7 +30,7 @@ type Auth interface {
 	Logout(
 		ctx context.Context,
 		sessionUuid string,
-		userId string,
+		userId uint64,
 	) int
 	SessionList(
 		ctx context.Context,

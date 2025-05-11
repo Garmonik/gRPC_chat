@@ -122,38 +122,31 @@ func (a *Auth) RegisterNewUser(
 func (a *Auth) Logout(
 	ctx context.Context,
 	sessionUuid string,
-	userId string) int {
+	userId uint64) int {
 	const op = "Auth.Logout"
 
 	log := a.log.With(slog.String("op", op))
 	log.Info("start Logout service")
 	defer log.Info("end Logout service")
 
-	userID, err := validate_lib.ConversionStringToUint(userId)
-	if err != nil {
-		log.Error("Error in ConversionStringToUint",
-			slog.Any("error", err.Error()),
-			slog.Any("userID", userID))
-		return interfase_lib.InvalidArgument
-	}
-	user, err := auth_utils.GetUserByID(ctx, userID, a.storage.Db)
+	user, err := auth_utils.GetUserByID(ctx, userId, a.storage.Db)
 	if user == nil {
 		log.Error("User not found",
-			slog.Any("userID", userID))
+			slog.Any("userID", userId))
 		return interfase_lib.NotFound
 	}
-	session, err := auth_utils.CheckSessionID(ctx, sessionUuid, userID, a.storage.Db)
+	session, err := auth_utils.CheckSessionID(ctx, sessionUuid, userId, a.storage.Db)
 	if session == nil {
 		log.Error("User does not have access to this session",
 			slog.Any("error", err),
-			slog.Any("userID", userID))
+			slog.Any("userID", userId))
 		return interfase_lib.PermissionDenied
 	}
-	err = auth_utils.CloseSession(ctx, sessionUuid, userID, a.storage.Db)
+	err = auth_utils.CloseSession(ctx, sessionUuid, userId, a.storage.Db)
 	if err != nil {
 		log.Error("Error closing session",
 			slog.Any("error", err.Error()),
-			slog.Any("userID", userID))
+			slog.Any("userID", userId))
 		return interfase_lib.Internal
 	}
 	return interfase_lib.OK
