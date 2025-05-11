@@ -85,3 +85,11 @@ func GetEnvAddress(hostEnv, portEnv string) string {
 	host := GetEnvStr(hostEnv)
 	return host + ":" + port
 }
+
+func GetEnvBool(valueEnv string) bool {
+	value := os.Getenv(valueEnv)
+	if value == "true" {
+		return true
+	}
+	return false
+}

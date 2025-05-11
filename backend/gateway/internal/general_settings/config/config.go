@@ -16,8 +16,9 @@ type DBConfig struct {
 }
 
 type GRPCAuthConfig struct {
-	Port int    `env:"GRPC_AUTH_PORT"`
-	Host string `env:"GRPC_AUTH_HOST"`
+	Port    int           `env:"GRPC_AUTH_PORT"`
+	Host    string        `env:"GRPC_AUTH_HOST"`
+	Timeout time.Duration `env:"GRPC_AUTH_TIMEOUT"`
 }
 
 type HTTPServerConfig struct {
@@ -59,8 +60,9 @@ func loadDBConfig() DBConfig {
 
 func loadGrpcAuthConfig() GRPCAuthConfig {
 	return GRPCAuthConfig{
-		Host: config_lib.GetEnvStr("GRPC_AUTH_HOST"),
-		Port: config_lib.GetEnvInt("GRPC_AUTH_PORT"),
+		Host:    config_lib.GetEnvStr("GRPC_AUTH_HOST"),
+		Port:    config_lib.GetEnvInt("GRPC_AUTH_PORT"),
+		Timeout: config_lib.GetEnvDuration("GRPC_AUTH_TIMEOUT"),
 	}
 }
 

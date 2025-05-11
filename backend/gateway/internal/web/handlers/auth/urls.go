@@ -11,6 +11,8 @@ func URLsWithoutVerification(cfg *config.Config, r *gin.RouterGroup, log *slog.L
 	authHandlers := New(cfg, r, log, dataBase)
 
 	r.GET("check/", authHandlers.healthCheck)
+	r.POST("login/", authHandlers.loginHandler)
+	r.POST("register/", authHandlers.registerHandler)
 
 }
 
@@ -18,5 +20,5 @@ func URLs(cfg *config.Config, r *gin.RouterGroup, log *slog.Logger, dataBase *go
 	authHandlers := New(cfg, r, log, dataBase)
 
 	r.GET("check/auth/", authHandlers.healthCheck)
-
+	r.GET("logout/", authHandlers.logoutHandler)
 }

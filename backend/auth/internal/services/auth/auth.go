@@ -125,8 +125,8 @@ func (a *Auth) Logout(
 	const op = "Auth.Logout"
 
 	log := a.log.With(slog.String("op", op))
-	log.Info("start Register service")
-	defer log.Info("end Register service")
+	log.Info("start Logout service")
+	defer log.Info("end Logout service")
 
 	userID, err := validate_lib.ConversionStringToUint(userId)
 	if err != nil {
@@ -156,4 +156,11 @@ func (a *Auth) Logout(
 		return interfase_lib.Internal
 	}
 	return interfase_lib.OK
+}
+
+func (a *Auth) SessionList(
+	ctx context.Context,
+	userId string) int {
+	const op = "Auth.Logout" {
+
 }

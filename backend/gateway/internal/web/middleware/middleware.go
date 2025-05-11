@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/database/accessing_database"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -11,6 +12,7 @@ import (
 func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sessionID := c.GetHeader("Authorization")
+		fmt.Println("sessionID:", sessionID)
 		if sessionID == "" {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Permission denied"})
 			return
@@ -21,14 +23,12 @@ func AuthMiddleware(db *gorm.DB) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Permission denied"})
 			return
 		}
-
 		session, err := accessing_database.GeSessionBySessionID(sessionUUID, db)
 		if err != nil {
 			c.Header("Authorization", "")
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Permission denied"})
 			return
 		}
-
 		if session.IsExpired() {
 			session.Close()
 			_ = db.Save(&session).Error
