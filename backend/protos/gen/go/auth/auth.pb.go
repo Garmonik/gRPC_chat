@@ -499,9 +499,9 @@ func (x *Session) GetIsClosed() bool {
 
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`              // user ID
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`           // username
-	CreatedAt     string                 `protobuf:"bytes,3,opt,name=createdAt,proto3" json:"createdAt,omitempty"` // user createdAt
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`      // user ID
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`   // username
+	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"` // user email
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -550,9 +550,9 @@ func (x *User) GetName() string {
 	return ""
 }
 
-func (x *User) GetCreatedAt() string {
+func (x *User) GetEmail() string {
 	if x != nil {
-		return x.CreatedAt
+		return x.Email
 	}
 	return ""
 }
@@ -594,11 +594,11 @@ const file_auth_auth_proto_rawDesc = "" +
 	"created_at\x18\x04 \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
 	"expires_at\x18\x05 \x01(\tR\texpiresAt\x12\x1b\n" +
-	"\tis_closed\x18\x06 \x01(\bR\bisClosed\"H\n" +
+	"\tis_closed\x18\x06 \x01(\bR\bisClosed\"@\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1c\n" +
-	"\tcreatedAt\x18\x03 \x01(\tR\tcreatedAt2\xec\x01\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email2\xec\x01\n" +
 	"\x04Auth\x129\n" +
 	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x16.auth.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x123\n" +
