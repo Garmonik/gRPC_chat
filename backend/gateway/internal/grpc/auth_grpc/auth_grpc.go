@@ -6,6 +6,7 @@ import (
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/config"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/database/models"
 	authv1 "github.com/Garmonik/gRPC_chat/backend/protos/gen/go/auth"
+	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials/insecure"
@@ -114,5 +115,45 @@ func (g *GRPCAuthClient) SessionsList(ctx context.Context, userID uint64) ([]mod
 		g.log.Error("gRPC Logout failed", "error", err)
 		return nil, err
 	}
-	return resp.Sessions, nil
+	sessions := make([]models.Session, 0, len(resp.Sessions))
+	for _, s := range resp.Sessions {
+		session, err := ConvertPBToSession(s)
+		if err != nil {
+			g.log.Error("Failed to convert session", "error", err)
+			continue
+		}
+		sessions = append(sessions, session)
+	}
+
+	return sessions, nil
+}
+
+func ConvertPBToSession(pbSession *authv1.Session) (models.Session, error) {
+	sessionID, err := uuid.Parse(pbSession.Id)
+	if err != nil {
+		return models.Session{}, fmt.Errorf("invalid session id: %w", err)
+	}
+
+	createdAt, err := time.Parse(time.RFC3339, pbSession.CreatedAt)
+	if err != nil {
+		return models.Session{}, fmt.Errorf("invalid created_at: %w", err)
+	}
+
+	expiresAt, err := time.Parse(time.RFC3339, pbSession.ExpiresAt)
+	if err != nil {
+		return models.Session{}, fmt.Errorf("invalid expires_at: %w", err)
+	}
+
+	return models.Session{
+		ID: sessionID,
+		User: models.User{
+			ID:    uint(pbSession.User.Id),
+			Name:  pbSession.User.Name,
+			Email: pbSession.User.Email,
+		},
+		IPAddress: pbSession.IpAddress,
+		CreatedAt: createdAt,
+		ExpiresAt: expiresAt,
+		IsClosed:  pbSession.IsClosed,
+	}, nil
 }

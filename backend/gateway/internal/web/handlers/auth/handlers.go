@@ -87,7 +87,7 @@ func (a *Auth) logoutHandler(ctx *gin.Context) {
 	})
 }
 
-func (a *Auth) CloseSessionHandler(ctx *gin.Context) {
+func (a *Auth) closeSessionHandler(ctx *gin.Context) {
 	var data closeSessionData
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -108,5 +108,16 @@ func (a *Auth) CloseSessionHandler(ctx *gin.Context) {
 }
 
 func (a *Auth) sessionsList(ctx *gin.Context) {
-
+	user, err := utils_lib.GetUser(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Permission denied"})
+	}
+	session, err := a.grpcAuthClient.SessionsList(ctx.Request.Context(), uint64(user.ID))
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"session": session,
+	})
 }

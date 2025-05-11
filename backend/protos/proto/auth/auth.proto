@@ -59,7 +59,7 @@ message Session {
 }
 
 message User {
-  uint64 id = 1;    // user ID
-  string name = 2;  // username
-  string email = 3; // user email
+  uint64 id = 1;        // user ID
+  string name = 2;      // username
+  string createdAt = 3; // user createdAt
 }
