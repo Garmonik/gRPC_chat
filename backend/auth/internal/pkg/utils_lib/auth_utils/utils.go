@@ -128,9 +128,9 @@ func ConvertSessionToPB(session models.Session) *authv1.Session {
 	return &authv1.Session{
 		Id: session.ID.String(),
 		User: &authv1.User{
-			Id:    uint64(session.User.ID),
-			Name:  session.User.Name,
-			Email: session.User.Email,
+			Id:        uint64(session.User.ID),
+			Name:      session.User.Name,
+			CreatedAt: session.User.CreatedAt,
 		},
 		IpAddress: session.IPAddress,
 		CreatedAt: session.CreatedAt.Format(time.RFC3339),
