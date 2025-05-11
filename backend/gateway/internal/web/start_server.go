@@ -5,6 +5,8 @@ import (
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/config"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/handlers/auth"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/middleware"
+	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/middleware/logger"
+	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/middleware/recover"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log/slog"
@@ -30,17 +32,11 @@ func SetupRouter(log *slog.Logger, cfg *config.Config, dataBase *gorm.DB) *gin.E
 	}
 
 	router := gin.New()
-	public := router.Group("/api/v1")
-	{
-		auth.URLsWithoutVerification(cfg, public, log, dataBase)
-	}
+	logger.SetupLoggingMiddleware(router, log)
+	recover.SetupRecoveryMiddleware(router, log)
 
-	private := router.Group("/api/v1")
-	private.Use(middleware.AuthMiddleware(dataBase))
-	{
-		auth.URLs(cfg, public, log, dataBase)
-
-	}
+	setupPublicRoutes(router, log, cfg, dataBase)
+	setupPrivateRoutes(router, log, cfg, dataBase)
 
 	log.Info("Starting API server",
 		"address", cfg.HTTPServer.Address, "env", cfg.Environment)
@@ -58,4 +54,15 @@ func GracefulShutdown(server *http.Server, log *slog.Logger, timeout time.Durati
 
 	log.Info("Server exited properly")
 
+}
+
+func setupPublicRoutes(router *gin.Engine, log *slog.Logger, cfg *config.Config, db *gorm.DB) {
+	public := router.Group("/api/v1")
+	auth.URLsWithoutVerification(cfg, public, log, db)
+}
+
+func setupPrivateRoutes(router *gin.Engine, log *slog.Logger, cfg *config.Config, db *gorm.DB) {
+	private := router.Group("/api/v1")
+	private.Use(middleware.AuthMiddleware(db))
+	auth.URLs(cfg, private, log, db)
 }
