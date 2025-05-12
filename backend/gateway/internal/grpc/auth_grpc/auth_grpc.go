@@ -44,20 +44,20 @@ func New(log *slog.Logger, cfg *config.Config) (*GRPCAuthClient, error) {
 		}),
 	)
 	if err != nil {
-		log.Error("failed to create gRPC client", "address", address, "err", err)
-		return nil, fmt.Errorf("failed to create gRPC client to %s: %w", address, err)
+		log.Error("failed to create Auth gRPC client", "address", address, "err", err)
+		return nil, fmt.Errorf("failed to create Auth gRPC client to %s: %w", address, err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if !conn.WaitForStateChange(ctx, connectivity.Idle) {
-		log.Warn("gRPC connection didn't initialize in time", "address", address)
+		log.Warn("Auth gRPC connection didn't initialize in time", "address", address)
 	}
 
 	client := authv1.NewAuthClient(conn)
 
-	log.Info("gRPC auth client created", "address", address)
+	log.Info("Auth gRPC auth client created", "address", address)
 	return &GRPCAuthClient{
 		client: client,
 		conn:   conn,
@@ -76,7 +76,7 @@ func (g *GRPCAuthClient) Login(ctx context.Context, email, password, ipAddress s
 		IpAddress: ipAddress,
 	})
 	if err != nil {
-		g.log.Error("gRPC Login failed", "error", err)
+		g.log.Error("Auth gRPC Login failed", "error", err)
 		return "", err
 	}
 	return resp.SessionUuid, nil
@@ -89,7 +89,7 @@ func (g *GRPCAuthClient) Register(ctx context.Context, email, password, name str
 		Name:     name,
 	})
 	if err != nil {
-		g.log.Error("gRPC Register failed", "error", err)
+		g.log.Error("Auth gRPC Register failed", "error", err)
 		return 0, err
 	}
 	return resp.UserId, nil
@@ -101,7 +101,7 @@ func (g *GRPCAuthClient) Logout(ctx context.Context, sessionUUID string, userID 
 		UserId:      userID,
 	})
 	if err != nil {
-		g.log.Error("gRPC Logout failed", "error", err)
+		g.log.Error("Auth gRPC Logout failed", "error", err)
 		return "", err
 	}
 	return resp.Message, nil
@@ -112,7 +112,7 @@ func (g *GRPCAuthClient) SessionsList(ctx context.Context, userID uint64) ([]mod
 		UserId: userID,
 	})
 	if err != nil {
-		g.log.Error("gRPC Logout failed", "error", err)
+		g.log.Error("Auth gRPC Logout failed", "error", err)
 		return nil, err
 	}
 	sessions := make([]models.Session, 0, len(resp.Sessions))
