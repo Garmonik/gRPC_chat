@@ -9,6 +9,7 @@ import (
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/crypto_lib"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/interfase_lib"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/utils_lib/auth_utils"
+	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/utils_lib/user_lib"
 	"github.com/Garmonik/gRPC_chat/backend/auth/internal/pkg/validate_lib"
 	"log/slog"
 	"time"
@@ -52,7 +53,7 @@ func (a *Auth) Login(
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.InvalidArgument},
 			fmt.Errorf("email not valid")
 	}
-	user, err := auth_utils.GetUserByEmail(ctx, email, a.storage.Db)
+	user, err := user_lib.GetUserByEmail(ctx, email, a.storage.Db)
 	if err != nil {
 		log.Error("User not found", slog.String("email", email), slog.Any("error", err.Error()))
 		return interfase_lib.SessionResponse{SessionUUID: "", Success: false, Code: interfase_lib.NotFound}, err
@@ -98,13 +99,13 @@ func (a *Auth) RegisterNewUser(
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.InvalidArgument},
 			fmt.Errorf("password not valid")
 	}
-	user, _ := auth_utils.GetUserByEmail(ctx, email, a.storage.Db)
+	user, _ := user_lib.GetUserByEmail(ctx, email, a.storage.Db)
 	if user != nil {
 		log.Error("User with this email already exists", slog.String("email", email))
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.AlreadyExists},
 			fmt.Errorf("user already exists")
 	}
-	user, _ = auth_utils.GetUserByName(ctx, name, a.storage.Db)
+	user, _ = user_lib.GetUserByName(ctx, name, a.storage.Db)
 	if user != nil {
 		log.Error("User with this email already exists", slog.String("name", name))
 		return interfase_lib.RegisterResponse{UserId: 0, Code: interfase_lib.AlreadyExists},
@@ -129,7 +130,7 @@ func (a *Auth) Logout(
 	log.Info("start Logout service")
 	defer log.Info("end Logout service")
 
-	user, err := auth_utils.GetUserByID(ctx, userId, a.storage.Db)
+	user, err := user_lib.GetUserByID(ctx, userId, a.storage.Db)
 	if user == nil {
 		log.Error("User not found",
 			slog.Any("userID", userId))

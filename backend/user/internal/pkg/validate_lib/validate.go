@@ -3,6 +3,7 @@ package validate_lib
 import (
 	passwordvalidator "github.com/wagslane/go-password-validator"
 	"net/mail"
+	"regexp"
 	"strconv"
 )
 
@@ -27,4 +28,42 @@ func ConversionStringToUint(str string) (uint, error) {
 	}
 	result := uint(num)
 	return result, nil
+}
+
+func IsSafeInput(input string) bool {
+	patterns := []string{
+		// SQL-инъекции
+		`(?i)(\bunion\b|\bselect\b|\binsert\b|\bupdate\b|\bdelete\b|\bdrop\b|\btruncate\b|\bexec\b|\bexecute\b|\bcreate\b|\balter\b)`,
+		`(\bOR\b|\bAND\b)\s+\d+\s*=\s*\d+`,
+		`['"]\s*\+\s*['"]`,
+		`--|\/\*|\*\/`,
+
+		// XSS
+		`<script.*?>.*?<\/script>`,
+		`<.*?on\w+\s*=\s*["'].*?["']`,
+		`javascript:\s*`,
+
+		// Shell-инъекции
+		`;\s*\w+`,
+		`\|\s*\w+`,
+		`&\s*\w+`,
+		`\$\s*\(`,
+		`\`,
+	}
+
+	for _, pattern := range patterns {
+		matched, err := regexp.MatchString(pattern, input)
+		if err != nil {
+			return false
+		}
+		if matched {
+			return false
+		}
+	}
+
+	if len(input) > 3000 {
+		return false
+	}
+
+	return true
 }

@@ -31,6 +31,9 @@ type User interface {
 	GetUserList(
 		ctx context.Context,
 		userId int64,
+		orderBy string,
+		asc bool,
+		search string,
 	) ([]*models.User, int)
 	FriendAdd(
 		ctx context.Context,
@@ -43,6 +46,10 @@ type User interface {
 	) (int, error)
 	FriendList(
 		ctx context.Context,
+		UserId int64,
+		orderBy string,
+		asc bool,
+		search string,
 	) ([]*models.User, int)
 	BlockAdd(
 		ctx context.Context,
@@ -54,6 +61,10 @@ type User interface {
 		friendId int64,
 	) (int, error)
 	BlockList(
+		UserId int64,
+		orderBy string,
+		asc bool,
+		search string,
 		ctx context.Context,
 	) ([]*models.User, int)
 }
