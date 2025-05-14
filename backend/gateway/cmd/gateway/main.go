@@ -34,7 +34,6 @@ func main() {
 			os.Exit(1)
 		}
 		log.Info("Server exited properly")
-
 	}()
 
 	// Graceful shutdown

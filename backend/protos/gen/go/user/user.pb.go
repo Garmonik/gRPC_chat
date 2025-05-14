@@ -145,7 +145,6 @@ type MyUserUpdateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	Bio           string                 `protobuf:"bytes,4,opt,name=bio,proto3" json:"bio,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -191,13 +190,6 @@ func (x *MyUserUpdateRequest) GetUserId() int64 {
 func (x *MyUserUpdateRequest) GetEmail() string {
 	if x != nil {
 		return x.Email
-	}
-	return ""
-}
-
-func (x *MyUserUpdateRequest) GetPassword() string {
-	if x != nil {
-		return x.Password
 	}
 	return ""
 }
@@ -255,7 +247,7 @@ func (x *MyUserUpdateResponse) GetMessage() string {
 
 type UserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -290,11 +282,11 @@ func (*UserRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *UserRequest) GetUserId() int64 {
+func (x *UserRequest) GetUsername() string {
 	if x != nil {
-		return x.UserId
+		return x.Username
 	}
-	return 0
+	return ""
 }
 
 type UserResponse struct {
@@ -360,6 +352,9 @@ func (x *UserResponse) GetBio() string {
 type UserListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	OrderBy       string                 `protobuf:"bytes,2,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	Asc           bool                   `protobuf:"varint,3,opt,name=asc,proto3" json:"asc,omitempty"`
+	Search        string                 `protobuf:"bytes,4,opt,name=search,proto3" json:"search,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -399,6 +394,27 @@ func (x *UserListRequest) GetUserId() int64 {
 		return x.UserId
 	}
 	return 0
+}
+
+func (x *UserListRequest) GetOrderBy() string {
+	if x != nil {
+		return x.OrderBy
+	}
+	return ""
+}
+
+func (x *UserListRequest) GetAsc() bool {
+	if x != nil {
+		return x.Asc
+	}
+	return false
+}
+
+func (x *UserListRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
 }
 
 type UserListResponse struct {
@@ -640,6 +656,9 @@ func (x *FriendDeleteResponse) GetMessage() string {
 type FriendListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	OrderBy       string                 `protobuf:"bytes,2,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	Asc           bool                   `protobuf:"varint,3,opt,name=asc,proto3" json:"asc,omitempty"`
+	Search        string                 `protobuf:"bytes,4,opt,name=search,proto3" json:"search,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -679,6 +698,27 @@ func (x *FriendListRequest) GetUserId() int64 {
 		return x.UserId
 	}
 	return 0
+}
+
+func (x *FriendListRequest) GetOrderBy() string {
+	if x != nil {
+		return x.OrderBy
+	}
+	return ""
+}
+
+func (x *FriendListRequest) GetAsc() bool {
+	if x != nil {
+		return x.Asc
+	}
+	return false
+}
+
+func (x *FriendListRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
 }
 
 type FriendListResponse struct {
@@ -920,6 +960,9 @@ func (x *BlockDeleteResponse) GetMessage() string {
 type BlockListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	OrderBy       string                 `protobuf:"bytes,2,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	Asc           bool                   `protobuf:"varint,3,opt,name=asc,proto3" json:"asc,omitempty"`
+	Search        string                 `protobuf:"bytes,4,opt,name=search,proto3" json:"search,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -959,6 +1002,27 @@ func (x *BlockListRequest) GetUserId() int64 {
 		return x.UserId
 	}
 	return 0
+}
+
+func (x *BlockListRequest) GetOrderBy() string {
+	if x != nil {
+		return x.OrderBy
+	}
+	return ""
+}
+
+func (x *BlockListRequest) GetAsc() bool {
+	if x != nil {
+		return x.Asc
+	}
+	return false
+}
+
+func (x *BlockListRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
 }
 
 type BlockListResponse struct {
@@ -1070,22 +1134,24 @@ const file_user_user_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x10\n" +
 	"\x03bio\x18\x04 \x01(\tR\x03bio\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\tR\tcreatedAt\"r\n" +
+	"created_at\x18\x05 \x01(\tR\tcreatedAt\"V\n" +
 	"\x13MyUserUpdateRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x14\n" +
-	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x10\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x10\n" +
 	"\x03bio\x18\x04 \x01(\tR\x03bio\"0\n" +
 	"\x14MyUserUpdateResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"&\n" +
-	"\vUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"D\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\")\n" +
+	"\vUserRequest\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\"D\n" +
 	"\fUserResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
-	"\x03bio\x18\x03 \x01(\tR\x03bio\"*\n" +
+	"\x03bio\x18\x03 \x01(\tR\x03bio\"o\n" +
 	"\x0fUserListRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"6\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x19\n" +
+	"\border_by\x18\x02 \x01(\tR\aorderBy\x12\x10\n" +
+	"\x03asc\x18\x03 \x01(\bR\x03asc\x12\x16\n" +
+	"\x06search\x18\x04 \x01(\tR\x06search\"6\n" +
 	"\x10UserListResponse\x12\"\n" +
 	"\x04user\x18\x01 \x03(\v2\x0e.auth.UserDataR\x04user\"I\n" +
 	"\x10FriendAddRequest\x12\x1c\n" +
@@ -1099,9 +1165,12 @@ const file_user_user_proto_rawDesc = "" +
 	"my_user_id\x18\x01 \x01(\x03R\bmyUserId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x03R\x06userId\"0\n" +
 	"\x14FriendDeleteResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\",\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"q\n" +
 	"\x11FriendListRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"8\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x19\n" +
+	"\border_by\x18\x02 \x01(\tR\aorderBy\x12\x10\n" +
+	"\x03asc\x18\x03 \x01(\bR\x03asc\x12\x16\n" +
+	"\x06search\x18\x04 \x01(\tR\x06search\"8\n" +
 	"\x12FriendListResponse\x12\"\n" +
 	"\x04user\x18\x01 \x03(\v2\x0e.auth.UserDataR\x04user\"H\n" +
 	"\x0fBlockAddRequest\x12\x1c\n" +
@@ -1115,9 +1184,12 @@ const file_user_user_proto_rawDesc = "" +
 	"my_user_id\x18\x01 \x01(\x03R\bmyUserId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\x03R\x06userId\"/\n" +
 	"\x13BlockDeleteResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"+\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"p\n" +
 	"\x10BlockListRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"7\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x19\n" +
+	"\border_by\x18\x02 \x01(\tR\aorderBy\x12\x10\n" +
+	"\x03asc\x18\x03 \x01(\bR\x03asc\x12\x16\n" +
+	"\x06search\x18\x04 \x01(\tR\x06search\"7\n" +
 	"\x11BlockListResponse\x12\"\n" +
 	"\x04user\x18\x01 \x03(\v2\x0e.auth.UserDataR\x04user\".\n" +
 	"\bUserData\x12\x0e\n" +
