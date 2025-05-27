@@ -32,6 +32,7 @@ type Config struct {
 	Environment string           `env:"ENVIRONMENT"`
 	GrpcAuth    GRPCAuthConfig   `envPrefix:"GRPC_AUTH_"`
 	HTTPServer  HTTPServerConfig `envPrefix:"HTTP_"`
+	FrontendUrl string           `env:"FRONTEND_URL"`
 }
 
 func MustLoad() *Config {
@@ -44,6 +45,7 @@ func MustLoad() *Config {
 		Environment: config_lib.GetEnvStr("ENVIRONMENT"),
 		GrpcAuth:    loadGrpcAuthConfig(),
 		HTTPServer:  loadHTTPServerConfig(),
+		FrontendUrl: config_lib.GetEnvStr("FRONTEND_URL"),
 	}
 }
 

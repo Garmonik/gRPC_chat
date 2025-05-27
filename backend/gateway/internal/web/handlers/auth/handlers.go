@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/general_settings/config"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/grpc/auth_grpc"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/pkg/utils_lib"
@@ -28,13 +29,6 @@ func New(cfg *config.Config, r *gin.RouterGroup, log *slog.Logger, dataBase *gor
 	return &Auth{cfg: cfg, router: r, log: log, DataBase: dataBase, grpcAuthClient: grpcAuthClient}
 }
 
-func (a *Auth) healthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"status":  "available",
-		"version": "1.0.0",
-	})
-}
-
 func (a *Auth) loginHandler(ctx *gin.Context) {
 	var data loginData
 	if err := ctx.ShouldBindJSON(&data); err != nil {
@@ -42,6 +36,7 @@ func (a *Auth) loginHandler(ctx *gin.Context) {
 		return
 	}
 	ipAddress := ctx.ClientIP()
+	fmt.Println("ipAddress:", ipAddress)
 	sessionUUID, err := a.grpcAuthClient.Login(ctx.Request.Context(), data.Email, data.Password, ipAddress)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})

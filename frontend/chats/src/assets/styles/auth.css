@@ -1,0 +1,72 @@
+/* Общие стили для auth-форм */
+.auth-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f5f3ff;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+}
+
+.dark-mode.auth-container {
+  background-color: #1e1b4b;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 3.5rem;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  margin: auto;
+}
+
+.theme-switcher {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  cursor: pointer;
+  color: #7e22ce;
+  transition: all 0.3s ease;
+}
+
+.theme-switcher:hover {
+  transform: scale(1.1);
+  color: #6d28d9;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.auth-header h2 {
+  color: #7e22ce;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.auth-header p {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 400;
+  max-width: 320px;
+  margin: 0 auto;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ... остальные общие стили ... */

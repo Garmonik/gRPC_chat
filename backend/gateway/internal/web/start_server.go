@@ -7,6 +7,7 @@ import (
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/middleware"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/middleware/logger"
 	"github.com/Garmonik/gRPC_chat/backend/gateway/internal/web/middleware/recover"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log/slog"
@@ -32,6 +33,14 @@ func SetupRouter(log *slog.Logger, cfg *config.Config, dataBase *gorm.DB) *gin.E
 	}
 
 	router := gin.New()
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{cfg.FrontendUrl},
+		AllowMethods:     []string{"POST", "GET", "PUT", "PATCH", "DELETE"},
+		AllowHeaders:     []string{"Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	logger.SetupLoggingMiddleware(router, log)
 	recover.SetupRecoveryMiddleware(router, log)
 
@@ -57,12 +66,12 @@ func GracefulShutdown(server *http.Server, log *slog.Logger, timeout time.Durati
 }
 
 func setupPublicRoutes(router *gin.Engine, log *slog.Logger, cfg *config.Config, db *gorm.DB) {
-	public := router.Group("/api/v1")
+	public := router.Group("/api/v1/")
 	auth.URLsWithoutVerification(cfg, public, log, db)
 }
 
 func setupPrivateRoutes(router *gin.Engine, log *slog.Logger, cfg *config.Config, db *gorm.DB) {
-	private := router.Group("/api/v1")
+	private := router.Group("/api/v1/")
 	private.Use(middleware.AuthMiddleware(db))
 	auth.URLs(cfg, private, log, db)
 }
