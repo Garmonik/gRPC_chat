@@ -132,7 +132,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import {ref, computed, onMounted, watchEffect} from 'vue'
 import api from '@/axios'
 import { useRouter } from 'vue-router'
 
@@ -147,6 +147,10 @@ const passwordEntropy = ref(0)
 const formValid = ref(false)
 
 const router = useRouter()
+
+watchEffect(() => {
+  document.title = 'Register'
+})
 
 function getCookie(name: string): string | null {
   const value = `; ${document.cookie}`

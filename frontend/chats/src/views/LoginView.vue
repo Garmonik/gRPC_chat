@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import api from '@/axios'
 import { useRouter } from 'vue-router'
 
@@ -105,6 +105,10 @@ const showPassword = ref(false)
 const rememberMe = ref(false)
 const darkMode = ref(true)
 const router = useRouter()
+
+watchEffect(() => {
+  document.title = 'Login'
+})
 
 onMounted(() => {
   const savedTheme = document.cookie.split('; ').find(row => row.startsWith('theme='))
