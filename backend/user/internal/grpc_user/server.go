@@ -47,6 +47,8 @@ func (s *serverAPI) MyUserUpdate(ctx context.Context, req *userv1.MyUserUpdateRe
 		return &userv1.MyUserUpdateResponse{Message: message}, status.Error(codes.Internal, "internal server error")
 	case interfase_lib.InvalidArgument:
 		return &userv1.MyUserUpdateResponse{Message: message}, status.Error(codes.InvalidArgument, "invalid argument")
+	case interfase_lib.AlreadyExists:
+		return &userv1.MyUserUpdateResponse{Message: message}, status.Error(codes.InvalidArgument, "invalid argument")
 	default:
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
@@ -68,11 +70,34 @@ func (s *serverAPI) User(ctx context.Context, req *userv1.UserRequest) (*userv1.
 }
 
 func (s *serverAPI) UserList(ctx context.Context, req *userv1.UserListRequest) (*userv1.UserListResponse, error) {
-	panic("implement me")
+	if req.GetUserId() == 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid user id")
+	}
+
+	users, code := s.userServices.GetUserList(ctx, req.GetUserId(), req.GetOrderBy(), req.GetAsc(), req.GetSearch())
+	switch code {
+	case interfase_lib.OK:
+		response := &userv1.UserListResponse{
+			User: make([]*userv1.UserData, 0, len(users)),
+		}
+		for _, user := range users {
+			response.User = append(response.User, &userv1.UserData{
+				Id:   uint64(user.ID),
+				Name: user.Name,
+			})
+		}
+		return response, nil
+	case interfase_lib.Internal:
+		return nil, status.Error(codes.Internal, "internal server error")
+	default:
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
 }
 
 func (s *serverAPI) FriendAdd(ctx context.Context, req *userv1.FriendAddRequest) (*userv1.FriendAddResponse, error) {
-	panic("implement me")
+	if req.GetMyUserId() == 0|req.GetFriendId() {
+
+	}
 }
 
 func (s *serverAPI) FriendDelete(ctx context.Context, req *userv1.FriendDeleteRequest) (*userv1.FriendDeleteResponse, error) {

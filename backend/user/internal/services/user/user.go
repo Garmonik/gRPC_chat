@@ -91,6 +91,10 @@ func (s *ServiceUser) UserUpdate(
 		log.Error("email is invalid", slog.String("email", email))
 		return interfase_lib.InvalidArgument, "email is invalid"
 	}
+	var usr, _ = user_lib.GetUserByEmail(ctx, email, s.storage.Db)
+	if usr != nil {
+		return interfase_lib.AlreadyExists, "user with this email already exists"
+	}
 	checkValidBio := validate_lib.IsSafeInput(bio)
 	if checkValidBio == false {
 		log.Error("bio is invalid", slog.String("email", email))
@@ -110,4 +114,54 @@ func (s *ServiceUser) UserUpdate(
 	default:
 		return interfase_lib.Internal, "error with server"
 	}
+}
+
+func (s *ServiceUser) GetUserList(
+	ctx context.Context,
+	userId int64,
+	orderBy string,
+	asc bool,
+	search string,
+) ([]*models.User, int) {
+	const op = "ServiceUser.GetUserList"
+
+	log := s.log.With(slog.String("op", op))
+	log.Info("start GetUserList service")
+	defer log.Info("end GetUserList service")
+
+	users, err := user_lib.GetUserList(ctx, userId, orderBy, asc, search, s.storage.Db)
+	if err != nil {
+		return nil, interfase_lib.Internal
+	}
+	return users, interfase_lib.OK
+}
+
+func (s *ServiceUser) FriendAdd(ctx context.Context, myUserId int64, friendId int64) (int, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *ServiceUser) FriendDelete(myUserId int64, friendId int64) (int, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *ServiceUser) FriendList(ctx context.Context, UserId int64, orderBy string, asc bool, search string) ([]*models.User, int) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *ServiceUser) BlockAdd(ctx context.Context, myUserId int64, friendId int64) (int, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *ServiceUser) BlockDelete(myUserId int64, friendId int64) (int, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *ServiceUser) BlockList(UserId int64, orderBy string, asc bool, search string, ctx context.Context) ([]*models.User, int) {
+	//TODO implement me
+	panic("implement me")
 }

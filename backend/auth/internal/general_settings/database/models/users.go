@@ -22,7 +22,7 @@ func (User) TableName() string {
 type Session struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
 	User      User      `gorm:"foreignKey:UserID"`
-	UserID    uint
+	UserID    uint      `gorm:"not null"`
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 	ExpiresAt time.Time `gorm:"index"`
 	IsClosed  bool      `gorm:"default:false"`

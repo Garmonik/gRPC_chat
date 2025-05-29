@@ -22,7 +22,7 @@ func (User) TableName() string {
 type Session struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
 	User      User      `gorm:"foreignKey:UserID"`
-	UserID    uint
+	UserID    uint      `gorm:"not null"`
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 	ExpiresAt time.Time `gorm:"index"`
 	IsClosed  bool      `gorm:"default:false"`
@@ -39,4 +39,19 @@ func (s *Session) IsExpired() bool {
 
 func (s *Session) Close() {
 	s.IsClosed = true
+}
+
+type FriendUser struct {
+	ID          uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	User1       User      `gorm:"foreignKey:UserID"`
+	User1ID     uint      `gorm:"not null"`
+	User2       User      `gorm:"foreignKey:UserID"`
+	User2ID     uint      `gorm:"not null"`
+	FriendUser1 bool      `gorm:"default:false"`
+	FriendUser2 bool      `gorm:"default:false"`
+	CreatedAt   time.Time `gorm:"autoCreateTime"`
+}
+
+func (FriendUser) TableName() string {
+	return "frienduser"
 }
