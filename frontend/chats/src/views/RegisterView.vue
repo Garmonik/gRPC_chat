@@ -132,9 +132,10 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, computed, onMounted, watchEffect} from 'vue'
+import { ref, computed, onMounted, watchEffect } from 'vue'
 import api from '@/axios'
 import { useRouter } from 'vue-router'
+import { useTheme } from '@/composables/useTheme'
 
 const name = ref('')
 const email = ref('')
@@ -142,48 +143,15 @@ const password = ref('')
 const error = ref('')
 const loading = ref(false)
 const showPassword = ref(false)
-const darkMode = ref(true)
+const { darkMode, toggleTheme } = useTheme()
 const passwordEntropy = ref(0)
 const formValid = ref(false)
+const emailError = ref('')
 
 const router = useRouter()
 
 watchEffect(() => {
   document.title = 'Register'
-})
-
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift() || null
-  return null
-}
-
-function setCookie(name: string, value: string, days = 365) {
-  const date = new Date()
-  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
-  document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`
-}
-
-onMounted(() => {
-  const themeCookie = getCookie('theme')
-  if (themeCookie) {
-    darkMode.value = themeCookie === 'dark'
-  } else {
-    darkMode.value = true
-  }
-  updateTheme()
-})
-
-onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme) {
-    darkMode.value = savedTheme === 'dark'
-    updateTheme()
-  } else {
-    darkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-    updateTheme()
-  }
 })
 
 const passwordStrength = computed(() => {
@@ -198,18 +166,24 @@ const passwordStrengthPercent = computed(() => {
 
 const passwordStrengthText = computed(() => {
   switch (passwordStrength.value) {
-    case 'weak': return 'Weak password (entropy < 50)'
-    case 'medium': return `Medium strength (entropy ${passwordEntropy.value.toFixed(1)})`
-    case 'strong': return `Strong password (entropy ${passwordEntropy.value.toFixed(1)})`
+    case 'weak': return 'Слабый пароль (энтропия < 50)'
+    case 'medium': return `Средний пароль (энтропия ${passwordEntropy.value.toFixed(1)})`
+    case 'strong': return `Сильный пароль (энтропия ${passwordEntropy.value.toFixed(1)})`
     default: return ''
   }
+})
+
+const emailValid = computed(() => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return re.test(email.value)
 })
 
 function validateForm() {
   formValid.value = name.value.trim() !== '' &&
     email.value.trim() !== '' &&
     password.value.trim() !== '' &&
-    passwordStrength.value !== 'weak'
+    passwordStrength.value !== 'weak' &&
+    emailValid.value
 }
 
 function calculatePasswordEntropy(password: string): number {
@@ -234,13 +208,28 @@ function checkPasswordStrength() {
   validateForm();
 }
 
+function validateEmail() {
+  if (!email.value) {
+    emailError.value = ''
+    return
+  }
+
+  if (!emailValid.value) {
+    emailError.value = 'Пожалуйста, введите корректный email адрес'
+  } else {
+    emailError.value = ''
+  }
+
+  validateForm()
+}
+
 async function register() {
   try {
     error.value = ''
     loading.value = true
 
     if (!formValid.value) {
-      throw new Error('Please fill all fields correctly')
+      throw new Error('Пожалуйста, заполните все поля корректно')
     }
 
     const response = await api.post('/v1/register/', {
@@ -249,52 +238,19 @@ async function register() {
       password: password.value
     })
 
-    document.cookie = `auth_token=${response.data.token}; path=/; SameSite=Lax; max-age=86400`
-    router.push('/')
+    if (response.data.token) {
+      document.cookie = `auth_token=${response.data.token}; path=/; SameSite=Lax; max-age=86400`
+      router.push('/')
+    } else {
+      throw new Error('Ошибка при регистрации: токен не получен')
+    }
 
   } catch (err) {
-    error.value = err.response?.data?.message || err.message || 'Registration failed'
+    error.value = err.response?.data?.message || err.message || 'Ошибка при регистрации'
   } finally {
     loading.value = false
   }
 }
-
-function toggleTheme() {
-  darkMode.value = !darkMode.value
-  updateTheme()
-  setCookie('theme', darkMode.value ? 'dark' : 'light')
-}
-
-function updateTheme() {
-  if (darkMode.value) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-}
-
-const emailValid = computed(() => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return re.test(email.value)
-})
-
-const emailError = ref('')
-
-function validateEmail() {
-  if (!email.value) {
-    emailError.value = ''
-    return
-  }
-
-  if (!emailValid.value) {
-    emailError.value = 'Please enter a valid email address'
-  } else {
-    emailError.value = ''
-  }
-
-  validateForm()
-}
-
 </script>
 
 <style scoped>
